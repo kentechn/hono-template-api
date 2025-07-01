@@ -1,9 +1,17 @@
 import { Scalar } from "@scalar/hono-api-reference";
 import { Hono } from "hono";
 import { openAPISpecs } from "hono-openapi";
+import {
+  errorLoggerMiddleware,
+  loggerMiddleware,
+} from "./presentation/middleware/logger.js";
 import healthRoute from "./presentation/routes/healthRoute.js";
 
 const app = new Hono().basePath("/api");
+
+// ログミドルウェアを追加
+app.use("*", loggerMiddleware());
+app.use("*", errorLoggerMiddleware());
 
 app.route("/health", healthRoute);
 
